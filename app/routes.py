@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 import random as r
 import json
 
@@ -10,6 +10,11 @@ app = Flask(__name__)
 def index():
     return render_template('index.html',
                            title='index')
+
+
+@app.route('/favicon.ico')
+def hello():
+    return redirect(url_for('static', filename='favicon.ico'), code=302)
 
 
 def random_alphabet():
