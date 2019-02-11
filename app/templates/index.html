@@ -1,5 +1,53 @@
 {% extends "_base.html" %}
 
 {% block content %}
-    <h1>Hello, world!</h1>
+    <div class="container">
+    <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+        <div class="list-group">
+            <div href="#" class="list-group-item list-group-item-action active">
+                Super Cool Code Busters Word Guesser
+            </div>
+            <div class="list-group-item list-group-item-action text-monospace" id="decoding"></div>
+            <div class="list-group-item list-group-item-action text-monospace" id="encoding"></div>
+            <div class="list-group-item list-group-item-action">
+                Guess: <input id="guess" type="text"/>
+            </div>
+        </div>
+        <p>&nbsp;</p>
+        <button onClick="checkWord();" type="button" class="btn btn-outline-success">Check</button>
+    </div>
 {% endblock content %}
+
+{% block js %}
+    <script>
+        var correct;
+
+        $(document).ready(function(){
+            newWord();
+        });
+
+        checkWord = function(){
+            let guess = $("#guess").val().toUpperCase();
+            if(guess === correct){
+                alert("Correct!");
+                newWord();
+            } else {
+                alert("WRONG!");
+            }
+        };
+
+        newWord = function(){
+            $.get("/getnew",{},
+            function(data, status){
+                data = JSON.parse(data);
+                console.log(data);
+
+                $("#decoding").text(data.guess);
+                $("#encoding").text(data.encoded_word);
+                correct = data.correct_word;
+                $("#guess").val("");
+
+            })
+        }
+    </script>
+{% endblock js %}
